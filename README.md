@@ -1,1 +1,150 @@
-# fixmate
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FixMate — Smart Home Maintenance</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f9fd;color:#10233f}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.nav{height:70px;background:#fff;border-bottom:1px solid #dce7f1;display:flex;align-items:center;justify-content:space-between;padding:0 6%;position:sticky;top:0;z-index:20}
+.brand{font-size:23px;font-weight:800}.brand b{color:#1677ff}.logo{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#1677ff;color:white;margin-right:8px}
+.navlinks{display:flex;gap:25px}.navlinks a{color:#52677f;text-decoration:none;font-size:14px}.navlinks a:hover{color:#1677ff}
+.btn{border:0;border-radius:10px;padding:11px 17px;font-weight:800}.primary{background:#1677ff;color:white;box-shadow:0 8px 20px #1677ff30}.ghost{background:white;border:1px solid #cadbe9;color:#24577f}
+.hero{padding:80px 7%;display:grid;grid-template-columns:1fr .9fr;gap:60px;align-items:center;background:linear-gradient(135deg,#fff,#edf7ff)}
+.label{font-size:11px;font-weight:900;letter-spacing:2px;color:#1677ff}.hero h1{font-size:60px;line-height:1.02;margin:14px 0}.hero h1 span,h2 span{color:#1677ff}.hero p{font-size:17px;line-height:1.7;color:#60758c;max-width:650px}.actions{display:flex;gap:12px;margin:28px 0}.stats{display:flex;gap:35px}.stats b{font-size:21px;display:block}.stats small{color:#75899e}
+.panel{background:#fff;border:1px solid #dce8f3;border-radius:22px;padding:23px;box-shadow:0 22px 55px #173f6317}.paneltop,.row,.modalhead{display:flex;justify-content:space-between;align-items:center}.score{background:#edf7ff;padding:20px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin:16px 0}.score strong{font-size:52px}.ring{width:65px;height:65px;border-radius:50%;border:8px solid #bddfff;border-right-color:#1677ff;display:grid;place-items:center;color:#1677ff;font-weight:800}.issue{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid #edf1f5}.issue .grow{flex:1}.issue small{display:block;color:#7a8da1;margin-top:3px}.issue button{border:1px solid #cfe0ef;background:white;border-radius:8px;padding:6px 10px;color:#1677ff;font-weight:800}
+section{padding:85px 7%}.dark{background:#0d223e;color:white}.dark p{color:#aebfd1}.dark h2 span{color:#65b7ff}h2{font-size:39px;margin:10px 0}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:35px}.card{background:#fff;border:1px solid #dce7f0;border-radius:15px;padding:22px}.card h3{margin:13px 0 7px}.card p{font-size:13px;color:#72859b;line-height:1.55}.icon{font-size:28px}.dark .card{background:#142f4d;border-color:#29445f}.dark .card p{color:#aabdd0}
+.scoresec{display:grid;grid-template-columns:1fr .75fr;gap:60px;align-items:center;background:#eaf5ff}.leader{background:#fff;border-radius:18px;padding:18px}.leader .row{padding:15px 8px;border-top:1px solid #edf1f5}.current{background:#eef7ff;border-radius:9px;color:#1677ff}.services{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.service{border:1px solid #dce7f0;background:#fff;border-radius:15px;padding:23px;text-align:left}.service small{display:block;color:#7a8da1;margin-top:7px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.step{background:#fff;padding:20px;border-radius:15px;border:1px solid #dce7f0}.step b{color:#1677ff}
+footer{padding:35px 7%;background:#091b30;color:#9eb2c9}.modal{display:none;position:fixed;inset:0;background:#06182abb;z-index:50;place-items:center;padding:20px}.modal.show{display:grid}.box{background:#fff;width:min(550px,100%);padding:28px;border-radius:20px;position:relative}.close{position:absolute;right:17px;top:10px;border:0;background:none;font-size:28px}.box textarea,.box input,.box select{width:100%;padding:12px;border:1px solid #cfdeea;border-radius:10px;margin:7px 0 13px}.box textarea{height:110px;resize:vertical}.full{width:100%}.result{font-size:13px;color:#1677ff;font-weight:700}.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);background:#0d223e;color:#fff;padding:12px 18px;border-radius:10px;opacity:0;transition:.25s;z-index:80}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){.navlinks{display:none}.hero,.scoresec{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.services{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.hero h1{font-size:47px}}
+@media(max-width:550px){section,.hero{padding:60px 5%}.grid,.services,.steps{grid-template-columns:1fr}.hero h1{font-size:40px}.stats{gap:18px}}
+</style>
+</head>
+<body>
+<header class="nav">
+ <div class="brand"><span class="logo">F</span>Fix<b>Mate</b></div>
+ <nav class="navlinks"><a href="#features">Features</a><a href="#score">Home Score</a><a href="#services">Services</a><a href="#history">History</a></nav>
+ <button class="btn primary" onclick="openReport()">Report Issue</button>
+</header>
+
+<main>
+<section class="hero">
+ <div>
+  <div class="label">AI-POWERED HOME MAINTENANCE PLATFORM</div>
+  <h1>Fix today.<br><span>Maintain smarter.</span><br>Live better.</h1>
+  <p>Identify home problems, prioritize urgent issues, discover professionals and keep your maintenance history organized — all in one place.</p>
+  <div class="actions"><button class="btn primary" onclick="openReport()">Report a Problem →</button><a class="btn ghost" href="#features">Explore Features</a></div>
+  <div class="stats"><div><b>24/7</b><small>Smart Assistance</small></div><div><b>AI</b><small>Issue Guidance</small></div><div><b>360°</b><small>Home Overview</small></div></div>
+ </div>
+ <div class="panel">
+  <div class="paneltop"><b>My Home</b><span style="color:#15945b">● Live</span></div>
+  <div class="score"><div><small>HOME HEALTH SCORE</small><br><strong id="scoreNumber">84</strong><span>/100</span></div><div class="ring" id="ring">84%</div></div>
+  <div id="issueList"></div>
+  <div style="font-size:12px;color:#74889d;padding-top:15px">Next reminder: <b style="color:#263c57">AC maintenance · 18 Sep</b></div>
+ </div>
+</section>
+
+<section class="dark">
+ <div class="label">THE PROBLEM</div><h2>Home maintenance is mostly <span>reactive.</span></h2>
+ <p>FixMate converts scattered maintenance tasks into a smart and organized experience.</p>
+ <div class="grid">
+  <div class="card">⚠️<h3>Trusted Professionals</h3><p>Finding the right professional can be difficult.</p></div>
+  <div class="card">⏱️<h3>Emergency Delays</h3><p>Urgent problems need faster attention.</p></div>
+  <div class="card">📋<h3>Repair History</h3><p>Keep previous maintenance records in one place.</p></div>
+  <div class="card">🏠<h3>Home Condition</h3><p>Get an overall view of your home's condition.</p></div>
+ </div>
+</section>
+
+<section id="features">
+ <div class="label">MAIN FEATURES</div><h2>Everything your home needs, <span>in one place.</span></h2>
+ <div class="grid">
+  <div class="card"><div class="icon">🤖</div><h3>AI Problem Assistance</h3><p>Describe an issue and receive guided next steps.</p></div>
+  <div class="card"><div class="icon">🚨</div><h3>Emergency Priority</h3><p>Highlight urgent issues for faster handling.</p></div>
+  <div class="card"><div class="icon">🧑‍🔧</div><h3>Professional Discovery</h3><p>Find suitable professionals for your issue.</p></div>
+  <div class="card"><div class="icon">📊</div><h3>Home Health Score</h3><p>Understand your home's overall condition.</p></div>
+  <div class="card"><div class="icon">🔔</div><h3>Smart Reminders</h3><p>Remember preventive maintenance before problems grow.</p></div>
+  <div class="card"><div class="icon">🗂️</div><h3>Service History</h3><p>Track repairs and maintenance activity.</p></div>
+  <div class="card"><div class="icon">⭐</div><h3>Ratings & Reviews</h3><p>Use feedback to make better service choices.</p></div>
+  <div class="card"><div class="icon">🏘️</div><h3>Community Home Score</h3><p>Friendly comparison encourages better home care.</p></div>
+ </div>
+</section>
+
+<section id="score" class="scoresec">
+ <div><div class="label">COMMUNITY HOME SCORE</div><h2>Make maintenance a <span>friendly challenge.</span></h2><p>Compare home scores within the community and use the score to encourage regular improvement.</p><button class="btn primary" onclick="improveScore()">Improve My Score →</button></div>
+ <div class="leader"><div class="row"><small>NEIGHBORHOOD</small><b>SCORE</b></div><div class="row"><span>🏠 Sharma Home</span><b>84</b></div><div class="row current"><span>🏠 My Home</span><b id="myScore">79</b></div><div class="row"><span>🏠 Verma Home</span><b>76</b></div><div class="row"><span>🏠 Khan Home</span><b>71</b></div></div>
+</section>
+
+<section id="services">
+ <div class="label">PROFESSIONAL SERVICES</div><h2>Find the right help, <span>faster.</span></h2>
+ <div class="services">
+  <button class="service" onclick="chooseService('Plumber')">🔧<b> Plumber</b><small>Leakage & water</small></button>
+  <button class="service" onclick="chooseService('Electrician')">⚡<b> Electrician</b><small>Electrical issues</small></button>
+  <button class="service" onclick="chooseService('AC Service')">❄️<b> AC Service</b><small>Cooling & maintenance</small></button>
+  <button class="service" onclick="chooseService('Carpenter')">🪚<b> Carpenter</b><small>Furniture & woodwork</small></button>
+ </div>
+</section>
+
+<section id="history" style="background:#f7fbff">
+ <div class="label">HOW FIXMATE WORKS</div><h2>From fixing problems <span>to preventing them.</span></h2>
+ <div class="steps">
+  <div class="step"><b>01</b><h3>Home Profile</h3><span>Create your home profile.</span></div>
+  <div class="step"><b>02</b><h3>Report</h3><span>Tell FixMate what is wrong.</span></div>
+  <div class="step"><b>03</b><h3>AI Assistance</h3><span>Get guided issue identification.</span></div>
+  <div class="step"><b>04</b><h3>Priority</h3><span>Highlight urgent problems.</span></div>
+  <div class="step"><b>05</b><h3>Professional Booking</h3><span>Connect with suitable help.</span></div>
+  <div class="step"><b>06</b><h3>History & Reminder</h3><span>Track and prevent future issues.</span></div>
+ </div>
+</section>
+
+<section>
+ <div class="label">FUTURE SCOPE</div><h2>Built to become <span>smarter over time.</span></h2>
+ <div class="actions" style="flex-wrap:wrap"><span class="btn ghost">Predictive Maintenance</span><span class="btn ghost">IoT Home Monitoring</span><span class="btn ghost">Regional Languages</span><span class="btn ghost">Smart Energy Monitoring</span><span class="btn ghost">Multi-city Expansion</span></div>
+</section>
+</main>
+
+<footer><div class="brand" style="color:white"><span class="logo">F</span>Fix<b>Mate</b></div><p>AI-powered home maintenance — fix today, maintain smarter, live better.</p></footer>
+
+<div class="modal" id="modal">
+ <div class="box">
+  <button class="close" onclick="closeReport()">×</button>
+  <div class="label">REPORT A PROBLEM</div><h2 style="font-size:28px">Tell FixMate what happened</h2>
+  <label>Problem</label><textarea id="problem" placeholder="Example: Water is leaking under my kitchen sink..."></textarea>
+  <label>Service category</label><select id="category"><option>Auto Detect with AI</option><option>Plumber</option><option>Electrician</option><option>AC Service</option><option>Carpenter</option></select>
+  <label>Priority</label><select id="priority"><option>Normal</option><option>Urgent</option></select>
+  <button class="btn primary full" onclick="submitReport()">Get AI Assistance →</button>
+  <p class="result" id="result"></p>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='fixmate_issues';
+let issues=JSON.parse(localStorage.getItem(KEY)||'[]');
+function save(){localStorage.setItem(KEY,JSON.stringify(issues))}
+function render(){
+ const list=document.getElementById('issueList');
+ if(!issues.length){list.innerHTML='<div style="padding:18px 0;color:#789">No reported problems yet. Your home is ready.</div>';return}
+ list.innerHTML=issues.slice(-3).reverse().map((x,i)=>`<div class="issue"><span style="font-size:23px">${x.priority==='Urgent'?'🚨':'🔧'}</span><div class="grow"><b>${escapeHtml(x.problem.slice(0,34))}${x.problem.length>34?'…':''}</b><small>${x.category} • ${x.priority}</small></div><button onclick="removeIssue(${issues.length-1-i})">Done</button></div>`).join('')
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function openReport(){document.getElementById('modal').classList.add('show')}
+function closeReport(){document.getElementById('modal').classList.remove('show')}
+function submitReport(){
+ const problem=document.getElementById('problem').value.trim(); if(!problem){document.getElementById('result').textContent='Please describe the problem.';return}
+ const category=document.getElementById('category').value==='Auto Detect with AI'?detect(problem):document.getElementById('category').value;
+ const priority=document.getElementById('priority').value;
+ issues.push({problem,category,priority,created:new Date().toISOString()});save();render();
+ document.getElementById('result').textContent=`AI suggestion: ${category}. ${priority==='Urgent'?'This issue has been marked urgent.':'Consider scheduling preventive service.'}`;
+ setTimeout(()=>{closeReport();toast('Problem saved to FixMate history!');document.getElementById('problem').value=''},1100)
+}
+function detect(t){t=t.toLowerCase();if(t.includes('leak')||t.includes('water')||t.includes('tap'))return'Plumber';if(t.includes('electric')||t.includes('switch')||t.includes('wire'))return'Electrician';if(t.includes('ac')||t.includes('cooling'))return'AC Service';if(t.includes('door')||t.includes('wood')||t.includes('furniture'))return'Carpenter';return'General Home Service'}
+function removeIssue(i){issues.splice(i,1);save();render();toast('Issue marked as completed.')}
+function chooseService(s){document.getElementById('category').value=s;openReport();document.getElementById('problem').focus()}
+function improveScore(){let el=document.getElementById('myScore'),n=+el.textContent;if(n<84){n++;el.textContent=n;toast('Home score improved to '+n+'!')}else toast('Great! Your home score is already excellent.')}
+function toast(m){let t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+render();
+</script>
+</body>
+</html>
